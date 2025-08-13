@@ -1,22 +1,25 @@
 <!--------------------------------------------------------------------------------- Description -->
 # Data Structure
-    this is documents of rust
+    using Atlas
 
 
 
 <!--------------------------------------------------------------------------------- Resource -->
-<br><br>
+<br><br>  
 
-## Atlas  
-
-### Install
+## Install
 Mac
 ```bash
 brew install ariga/tap/atlas
 atlas version
 ```
 
-### Migration
+
+
+<!--------------------------------------------------------------------------------- Resource -->
+<br><br>  
+
+## Migration
 Create
 ```bash
 atlas migrate new user
@@ -24,10 +27,12 @@ atlas migrate new user --edit
 atlas migrate new user --dir "file://migrationsq"
 ```
 
+
+
 <!--------------------------------------------------------------------------------- Init -->
 <br><br>
 
-### Init
+## Init
 Postgres
 ```bash
 atlas migrate diff init_pg --env pg
