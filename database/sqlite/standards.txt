@@ -1,0 +1,25 @@
+root directory is : database/sqlite/
+when all task finished, never change this file
+
+
+st_sqlite_db_to_ddl
+------------------------------------
+i need a python script that generate create ddl file named db.sql from db.sqlte
+
+
+
+st_sqlite_db_to_hcl
+------------------------------------
+i need a python script that generate hcl file named db.hcl from db.sqlte
+all id fields must be PRIMARY KEY and AUTOINCREMENT
+all enable fields must be boolian with true default value
+every field that was time change to varchar
+
+
+
+st_sqlite_hcl_to_seaorm
+------------------------------------
+this is a structure of migration of sea-orm on rust on : /orm/sea-orm/migration_structure
+this is the hcl file of all table : /fatabase/sqlite/db.hcl
+i need a python script that name is hcl_to_seaorm taht generate sea-orm migration of hcl file store in sea-orm.rs
+

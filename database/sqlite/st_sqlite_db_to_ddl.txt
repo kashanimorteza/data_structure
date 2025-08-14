@@ -1,2 +1,0 @@
-root directory is : database/sqlite/
-i need a python script that generate create ddl file named db.sql from db.sqlte
