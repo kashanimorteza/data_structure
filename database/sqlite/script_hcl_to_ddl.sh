@@ -3,9 +3,9 @@ set -euo pipefail
 
 # Config
 DB_ENGIN="sqlite"                             # Database engine
-DB_Name="database"                            # Database name
-HCL_DIR="./${DB_ENGIN}/hcl"
-OUT_DIR="./${DB_ENGIN}/ddl"
+DB_NAME="db"                            # Database name
+HCL_DIR="./${DB_ENGIN}"
+OUT_DIR="./${DB_ENGIN}"
 DEV_URL='sqlite://dev?mode=memory'
 
 # Checks
@@ -30,5 +30,9 @@ for file in "${files[@]}"; do
     --dev-url "$DEV_URL" \
     --dir "file://$OUT_DIR"
 done
+
+mv ./${DB_ENGIN}/*_${DB_NAME}.sql ./${DB_ENGIN}/${DB_NAME}.sql
+rm -fr ./${DB_ENGIN}/atlas.sum
+
 
 echo "All done. Migrations written to $OUT_DIR"

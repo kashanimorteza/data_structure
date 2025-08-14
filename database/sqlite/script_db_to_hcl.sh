@@ -3,15 +3,15 @@ set -euo pipefail
 
 # Database configuration
 DB_ENGIN="sqlite"                             # Database engine
-DB_Name="database"                            # Database name
-DB_FILE="./${DB_ENGIN}/${DB_Name}.db"         # Path to database file
-OUT_DIR="./${DB_ENGIN}/hcl"                   # Output directory for HCL
+DB_NAME="db"                            # Database name
+DB_FILE="./${DB_ENGIN}/${DB_NAME}.sqlite"         # Path to database file
+OUT_DIR="./${DB_ENGIN}"                   # Output directory for HCL
 SCHEMA_NAME="main"                            # Schema name
-COMBINED="$OUT_DIR/${DB_Name}.hcl"            # Single output HCL file
+COMBINED="$OUT_DIR/${DB_NAME}.hcl"            # Single output HCL file
 
 echo -e "\n"
 echo "Database Engine: $DB_ENGIN"
-echo "Database Name: $DB_Name"
+echo "Database Name: $DB_NAME"
 echo "Database File: $DB_FILE"
 echo "Done. Combined HCL written to: $COMBINED"
 echo -e "\n"
