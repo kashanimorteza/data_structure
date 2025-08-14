@@ -50,25 +50,6 @@ atlas migrate diff init_mysql --env mysql
 
 
 
-<!--------------------------------------------------------------------------------- Apply to database -->
-<br><br>
-
-## Apply to database
-SQLite
-```bash
-atlas migrate apply --env sqlite
-```
-
-Postgres
-```bash
-atlas migrate apply --env pg
-```
-
-MySQL
-```bash
-atlas migrate apply --env mysql
-```
-
 
 <!--------------------------------------------------------------------------------- HCL To DDL -->
 <br><br>
@@ -77,8 +58,7 @@ atlas migrate apply --env mysql
 
 SQLite
 ```bash
-atlas migrate diff user --to "file://hcl/user.hcl" --dev-url "sqlite://dev?mode=memory" --dir "file://ddl/sqlite"
-atlas migrate diff user --to "file://hcl/user.hcl" --dev-url "sqlite://dev?mode=memory" --dir "file://ddl/sqlite"   --format "{{ sql . }}" > user.sqlc
+atlas migrate diff database --to "file://sqlite/hcl/database.hcl" --dev-url "sqlite://dev?mode=memory" --dir "file://sqlite/ddl/"
 ```
 
 Postgres
@@ -116,4 +96,26 @@ ddl : ./postgres/ddl.sh
 sql : ./mysql/sql.sh
 hcl : ./mysql/hcl.sh
 ddl : ./mysql/ddl.sh
+```
+
+
+
+<!--------------------------------------------------------------------------------- DDL To Database -->
+<br><br>
+
+## DDL To Database
+
+### SQLite
+```bash
+atlas migrate apply --url "sqlite://./app.db" --dir "file://sqlite/ddl/"
+```
+
+### Postgres
+```bash
+atlas migrate apply --env pg
+```
+
+### MySQL
+```bash
+atlas migrate apply --env mysql
 ```
