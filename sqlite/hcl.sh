@@ -1,8 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
-DB_PATH="database.db"         # Path to your SQLite database file
-OUT_DIR="hcl"                 # Output folder for HCL files
+DB_PATH="./sqlite/sqlite.db" # Path to your SQLite database file
+OUT_DIR="./sqlite/hcl"          # Where to put the migration folders
 SCHEMA_NAME="main"            # Adjust if your schema name is different
 
 mkdir -p "$OUT_DIR"

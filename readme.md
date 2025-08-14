@@ -97,11 +97,43 @@ Mysql
 ## Script
 
 ### SQLite
-sqlite_to_sql.sh
-    Read sqlite database and generate DDL of all tables and store to sql folder
+sql
+```bash
+./sqlite/hcl.sh
+```
+hcl
+```bash
+./sqlite/hcl.sh
+```
+ddl
+```bash
+./sqlite/ddl.sh
+```
 
-sqlite_to_hcl.sh
-    Read sqlite database and generate HCL of all tables and store to hcl folder
+### Postgres
+sql
+```bash
+./postgres/hcl.sh
+```
+hcl
+```bash
+./postgres/hcl.sh
+```
+ddl
+```bash
+./postgres/ddl.sh
+```
 
-hcl_to_ddl.sh
-    Read all file on hcl folder and generate DDL and store to ddl folder
+### Mysql
+sql
+```bash
+./mysql/hcl.sh
+```
+hcl
+```bash
+./mysql/hcl.sh
+```
+ddl
+```bash
+./mysql/ddl.sh
+```

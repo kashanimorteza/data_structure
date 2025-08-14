@@ -1,7 +1,7 @@
 #!/bin/bash
 
-DB_PATH="database.db"        # Path to your SQLite database file
-ROOT="sql"         # Where to put the migration folders
+DB_PATH="./sqlite/sqlite.db" # Path to your SQLite database file
+ROOT="./sqlite/sql"          # Where to put the migration folders
 
 # Make sure the root migration directory exists
 mkdir -p "$ROOT"
