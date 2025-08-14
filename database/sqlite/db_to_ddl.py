@@ -91,6 +91,13 @@ class SQLiteToDDLConverter:
         
         return SQLiteTable(table_name, columns)
     
+    def get_raw_create_statement(self, conn: sqlite3.Connection, table_name: str) -> str:
+        """Get the raw CREATE TABLE statement from sqlite_master"""
+        cursor = conn.cursor()
+        cursor.execute("SELECT sql FROM sqlite_master WHERE type='table' AND name=?", (table_name,))
+        result = cursor.fetchone()
+        return result[0] if result else ""
+    
     def map_sqlite_type_to_sql(self, sqlite_type: str) -> str:
         """Map SQLite type to SQL type"""
         # Handle types with parameters like VARCHAR(50)
@@ -125,21 +132,24 @@ class SQLiteToDDLConverter:
         
         return modified_column
     
-    def generate_ddl_schema(self, tables: List[SQLiteTable]) -> str:
-        """Generate SQL DDL from SQLite tables"""
+    def generate_ddl_schema(self, conn: sqlite3.Connection, table_names: List[str]) -> str:
+        """Generate SQL DDL from SQLite tables using raw SQL from sqlite_master"""
         ddl_lines = []
         
         # Add header comment
         ddl_lines.append("-- SQL DDL generated from SQLite database")
-        ddl_lines.append("-- Generated with special rules:")
-        ddl_lines.append("--   * All 'id' fields → PRIMARY KEY + AUTOINCREMENT")
-        ddl_lines.append("--   * All 'enable' fields → BOOLEAN with default TRUE")
-        ddl_lines.append("--   * All 'time' fields → VARCHAR")
+        ddl_lines.append("-- Extracted directly from sqlite_master table")
         ddl_lines.append("")
         
-        for table in tables:
-            ddl_lines.extend(self._generate_table_ddl(table))
-            ddl_lines.append("")
+        for table_name in table_names:
+            # Get raw CREATE TABLE statement
+            create_sql = self.get_raw_create_statement(conn, table_name)
+            if create_sql:
+                ddl_lines.append(f"{create_sql};")
+                ddl_lines.append("")
+            else:
+                ddl_lines.append(f"-- Warning: Could not get CREATE statement for table '{table_name}'")
+                ddl_lines.append("")
         
         return '\n'.join(ddl_lines)
     
@@ -268,35 +278,12 @@ class SQLiteToDDLConverter:
             
             print(f"Found {len(table_names)} tables:")
             
-            # Get detailed information for each table
-            tables = []
+            # Show table names (simplified since we're using raw SQL)
             for table_name in table_names:
-                table = self.get_table_info(conn, table_name)
-                tables.append(table)
-                
-                # Count special fields
-                id_fields = [col.name for col in table.columns if col.name.lower() == 'id']
-                enable_fields = [col.name for col in table.columns if col.name.lower() == 'enable']
-                time_fields = [col.name for col in table.columns if 'time' in col.type.lower() or 'time' in col.name.lower()]
-                
-                special_info = ""
-                if id_fields:
-                    special_info += f" [ID: {', '.join(id_fields)}]"
-                if enable_fields:
-                    special_info += f" [ENABLE: {', '.join(enable_fields)}]"
-                if time_fields:
-                    special_info += f" [TIME→VARCHAR: {', '.join(time_fields)}]"
-                
-                print(f"  - {table_name} ({len(table.columns)} columns){special_info}")
+                print(f"  - {table_name}")
             
-            # Generate DDL schema
-            ddl_content = self.generate_ddl_schema(tables)
-            
-            # Add foreign keys if any
-            fk_statements = self.generate_foreign_keys_ddl(conn, tables)
-            if fk_statements:
-                ddl_content += "\n-- Foreign Key Constraints\n"
-                ddl_content += "\n".join(fk_statements)
+            # Generate DDL schema using raw SQL from sqlite_master
+            ddl_content = self.generate_ddl_schema(conn, table_names)
             
             # Write to output file
             with open(output_path, 'w', encoding='utf-8') as f:
@@ -304,10 +291,9 @@ class SQLiteToDDLConverter:
             
             print(f"\nSQL DDL generated successfully!")
             print(f"Output file: {output_path}")
-            print("\n📋 Applied Rules:")
-            print("  ✅ All 'id' fields → PRIMARY KEY + AUTOINCREMENT")
-            print("  ✅ All 'enable' fields → BOOLEAN with default TRUE")
-            print("  ✅ All 'time' fields → VARCHAR")
+            print("\n📋 Method:")
+            print("  ✅ Raw SQL extracted directly from sqlite_master table")
+            print("  ✅ Original CREATE TABLE statements preserved")
             
         finally:
             conn.close()
