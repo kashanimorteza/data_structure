@@ -2,8 +2,10 @@
 set -euo pipefail
 
 # Config
-HCL_DIR="./sqlite/hcl"
-OUT_DIR="./sqlite/ddl"
+DB_ENGIN="sqlite"                             # Database engine
+DB_Name="database"                            # Database name
+HCL_DIR="./${DB_ENGIN}/hcl"
+OUT_DIR="./${DB_ENGIN}/ddl"
 DEV_URL='sqlite://dev?mode=memory'
 
 # Checks

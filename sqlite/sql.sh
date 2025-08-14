@@ -1,9 +1,25 @@
 #!/bin/bash
+set -euo pipefail
 
-DB_PATH="./sqlite/sqlite.db" # Path to your SQLite database file
-ROOT="./sqlite/sql"          # Where to put the migration folders
+# Database configuration
+DB_ENGIN="sqlite"            # Database engine
+DB_Name="database"           # Database name
 
-# Make sure the root migration directory exists
+# Derived paths
+DB_DIR="./${DB_ENGIN}"
+DB_PATH="${DB_DIR}/${DB_Name}.db"   # Path to your SQLite database file
+ROOT="${DB_DIR}/sql"                # Where to put the migration folders
+
+echo -e "\n"
+echo "Done. SQL migrations under: $ROOT"
+echo "DB engine: $DB_ENGIN"
+echo "DB name:   $DB_Name"
+echo "DB file:   $DB_PATH"
+echo -e "\n"
+
+
+# Ensure prerequisites
+command -v sqlite3 >/dev/null 2>&1 || { echo "Error: sqlite3 not found in PATH" >&2; exit 1; }
 mkdir -p "$ROOT"
 
 # Get all user tables (skip sqlite internal tables)
@@ -27,3 +43,5 @@ while IFS= read -r table; do
 
     echo "Created $dir/up.sql and $dir/down.sql"
 done <<< "$tables"
+
+echo -e "\n"
