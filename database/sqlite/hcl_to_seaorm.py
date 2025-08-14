@@ -293,16 +293,7 @@ impl MigrationTrait for {migration_name} {{
         
         return definition
     
-    def generate_multiple_migrations(self, tables: List[HCLTable]) -> List[Tuple[str, str]]:
-        """Generate separate migration for each table"""
-        migrations = []
-        
-        for i, table in enumerate(tables, 1):
-            migration_name = f"M{i:04d}Create{self._pascal_case(table.name)}Table"
-            migration_code = self.generate_migration([table], migration_name)
-            migrations.append((f"m{i:04d}_create_{table.name}_table.rs", migration_code))
-        
-        return migrations
+
     
     def _pascal_case(self, name: str) -> str:
         """Convert snake_case to PascalCase"""
@@ -347,18 +338,6 @@ def main():
         
         print(f"\nSea-ORM migration generated successfully!")
         print(f"Output file: {output_file}")
-        
-        # Also generate individual migrations for reference
-        individual_migrations = generator.generate_multiple_migrations(tables)
-        migrations_dir = os.path.join(script_dir, "migrations")
-        os.makedirs(migrations_dir, exist_ok=True)
-        
-        print(f"\nIndividual migrations generated in: {migrations_dir}")
-        for filename, code in individual_migrations:
-            filepath = os.path.join(migrations_dir, filename)
-            with open(filepath, 'w', encoding='utf-8') as f:
-                f.write(code)
-            print(f"  - {filename}")
         
         return 0
         
