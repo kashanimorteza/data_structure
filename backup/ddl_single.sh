@@ -19,14 +19,18 @@ if (( ${#files[@]} == 0 )); then
 fi
 
 for file in "${files[@]}"; do
-  base="${file##*/}"      # e.g., user.hcl or hcl.hcl
-  name="${base%.hcl}"     # e.g., user or hcl
+  base="${file##*/}"      # e.g., user.hcl
+  name="${base%.hcl}"     # e.g., user
+  table_dir="$OUT_DIR/$name"
 
-  echo "==> Generating DDL for '$name' from '$file' into '$OUT_DIR/'"
+  # Make a dedicated folder per file
+  mkdir -p "$table_dir"
+
+  echo "==> Generating DDL for '$name' from '$file' into '$table_dir/'"
   atlas migrate diff "$name" \
     --to "file://$file" \
     --dev-url "$DEV_URL" \
-    --dir "file://$OUT_DIR"
+    --dir "file://$table_dir"
 done
 
-echo "All done. Migrations written to $OUT_DIR"
+echo "All done. Migrations written under $OUT_DIR/, one folder per HCL file."
