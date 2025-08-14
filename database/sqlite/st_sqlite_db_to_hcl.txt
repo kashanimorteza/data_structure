@@ -1,0 +1,5 @@
+root directory is : database/sqlite/
+i need a python script that generate hcl file named db.hcl from db.sqlte
+all id fields must be PRIMARY KEY and AUTOINCREMENT
+all enable fields must be boolian with true default value
+every field that was time change to varchar

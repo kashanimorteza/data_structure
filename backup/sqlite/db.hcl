@@ -212,7 +212,7 @@ table "device" {
   }
 
   column "date" {
-    type = varchar
+    type = time
     null = true
   }
 
@@ -751,4 +751,3 @@ table "zone_command_if" {
     columns = [column.id]
   }
 }
-
