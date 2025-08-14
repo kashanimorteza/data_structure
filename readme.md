@@ -91,49 +91,29 @@ Mysql
 ```
 
 
+
 <!--------------------------------------------------------------------------------- Script -->
 <br><br>
 
 ## Script
 
 ### SQLite
-sql
 ```bash
-./sqlite/hcl.sh
-```
-hcl
-```bash
-./sqlite/hcl.sh
-```
-ddl
-```bash
-./sqlite/ddl.sh
+sql : ./sqlite/sql.sh
+hcl : ./sqlite/hcl.sh
+ddl : ./sqlite/ddl.sh
 ```
 
 ### Postgres
-sql
 ```bash
-./postgres/hcl.sh
-```
-hcl
-```bash
-./postgres/hcl.sh
-```
-ddl
-```bash
-./postgres/ddl.sh
+sql : ./postgres/sql.sh
+hcl : ./postgres/hcl.sh
+ddl : ./postgres/ddl.sh
 ```
 
 ### Mysql
-sql
 ```bash
-./mysql/hcl.sh
-```
-hcl
-```bash
-./mysql/hcl.sh
-```
-ddl
-```bash
-./mysql/ddl.sh
+sql : ./mysql/sql.sh
+hcl : ./mysql/hcl.sh
+ddl : ./mysql/ddl.sh
 ```

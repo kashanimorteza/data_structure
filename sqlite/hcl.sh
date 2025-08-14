@@ -1,21 +1,30 @@
 #!/bin/bash
 set -euo pipefail
 
-DB_PATH="./sqlite/sqlite.db"   # Path to your SQLite database file
-OUT_DIR="./sqlite/hcl"         # Output directory for HCL
-SCHEMA_NAME="main"             # Change if needed
-COMBINED="$OUT_DIR/hcl.hcl"    # Single output file for all tables
+# Database configuration
+DB_ENGIN="sqlite"                             # Database engine
+DB_Name="database"                            # Database name
+DB_FILE="./${DB_ENGIN}/${DB_Name}.db"         # Path to database file
+OUT_DIR="./${DB_ENGIN}/hcl"                   # Output directory for HCL
+SCHEMA_NAME="main"                            # Schema name
+COMBINED="$OUT_DIR/${DB_Name}.hcl"            # Single output HCL file
+
+echo -e "\n"
+echo "Database Engine: $DB_ENGIN"
+echo "Database Name: $DB_Name"
+echo "Database File: $DB_FILE"
+echo "Done. Combined HCL written to: $COMBINED"
+echo -e "\n"
 
 mkdir -p "$OUT_DIR"
 
 # Map SQLite type to HCL type
 map_type() {
   local t
-  t=$(echo "$1" | tr '[:upper:]' '[:lower:]')  # lowercase safely
+  t=$(echo "$1" | tr '[:upper:]' '[:lower:]')
   t="${t//,/}"
   t="${t//  / }"
 
-  # If the type is exactly "time", change to varchar
   if [[ "$t" == "time" ]]; then
     echo "varchar"
     return
@@ -45,41 +54,36 @@ format_default() {
   local hcl_type="$2"
   [[ -z "$dflt" ]] && { echo ""; return; }
 
-  # trim
   dflt="$(echo -n "$dflt" | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')"
 
-  # Already-quoted strings stay as-is
   if [[ "$dflt" =~ ^\'.*\'$ || "$dflt" =~ ^\".*\"$ ]]; then
     echo "$dflt"; return
   fi
 
-  # Booleans 0/1 → false/true
   if [[ "$hcl_type" == "bool" ]]; then
     [[ "$dflt" == "1" ]] && echo "true" && return
     [[ "$dflt" == "0" ]] && echo "false" && return
   fi
 
-  # NULL → omit
   if [[ "$(printf '%s' "$dflt" | tr '[:lower:]' '[:upper:]')" == "NULL" ]]; then
     echo ""
     return
   fi
 
-  # Functions/numerics keep as-is
   echo "$dflt"
 }
 
-# Start combined file with a single schema header
+# Start combined file
 {
   echo "schema \"$SCHEMA_NAME\" {}"
   echo
 } > "$COMBINED"
 
-# Get all user tables (skip SQLite internals)
-tables=$(sqlite3 "$DB_PATH" \
+# Get all user tables
+tables=$(sqlite3 "$DB_FILE" \
   "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name;")
 
-# Append each table block to the combined file
+# Append each table block
 while IFS= read -r table; do
   [[ -z "$table" ]] && continue
 
@@ -88,8 +92,7 @@ while IFS= read -r table; do
     echo "  schema = schema.$SCHEMA_NAME"
     echo
 
-    # Columns: cid|name|type|notnull|dflt_value|pk
-    sqlite3 -separator '|' "$DB_PATH" "PRAGMA table_info('$table');" \
+    sqlite3 -separator '|' "$DB_FILE" "PRAGMA table_info('$table');" \
     | while IFS='|' read -r cid name type notnull dflt pk; do
         hcl_type=$(map_type "$type")
         nullable="true"
@@ -106,8 +109,7 @@ while IFS= read -r table; do
         echo
       done
 
-    # Primary key (ordered)
-    pk_cols=$(sqlite3 -separator '|' "$DB_PATH" \
+    pk_cols=$(sqlite3 -separator '|' "$DB_FILE" \
       "SELECT name FROM pragma_table_info('$table') WHERE pk>0 ORDER BY pk;")
 
     if [[ -n "$pk_cols" ]]; then
@@ -134,4 +136,4 @@ while IFS= read -r table; do
   echo "Added table '$table' to $COMBINED"
 done <<< "$tables"
 
-echo "Done. Combined HCL written to: $COMBINED"
+echo -e "\n"
