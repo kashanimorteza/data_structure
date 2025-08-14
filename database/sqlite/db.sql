@@ -1,5 +1,6 @@
 -- SQL DDL generated from SQLite database
--- Extracted directly from sqlite_master table
+-- Using SELECT sql FROM sqlite_master approach
+-- Contains CREATE TABLE statements only (no DROP tables)
 
 CREATE TABLE config (
 	id INTEGER NOT NULL, 

@@ -5,9 +5,13 @@ when all task finished, never change this file
 
 
 
-db_to_ddl.py
+db_to_ddl.py creation rules
 ------------------------------------
-i need a python script that generate create ddl file named db.sql from db.sqlte
+first read sql_single.sh becuse using SELECT sql FROM sqlite_master WHERE type='table' AND name='$table'; for less code
+i need a python script named db_to_ddl.py that generate ddl file from db.sqlte and store on db.sql
+i need a single file that contain Create TABLE no DROP table
+
+
 
 
 
