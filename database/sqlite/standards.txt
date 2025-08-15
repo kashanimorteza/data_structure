@@ -7,20 +7,14 @@ when all task finished, never change this file
 
 db_to_ddl.py creation rules
 ------------------------------------
-first read sql_single.sh becuse using SELECT sql FROM sqlite_master WHERE type='table' AND name='$table'; for less code
 i need a python script named db_to_ddl.py that generate ddl file from db.sqlte and store on db.sql
-i need a single file that contain Create TABLE no DROP table
 
 
 
-
-
-db_to_hcl
+ddl_to_hcl.py creation rules
 ------------------------------------
-i need a python script that generate hcl file named db.hcl from db.sqlte
-all id fields must be PRIMARY KEY and AUTOINCREMENT
-all enable fields must be boolian with true default value
-every field that was time change to varchar
+i need a python script named ddl_to_hcl.py that generate hcl file from db.sql and store on db.hcl
+
 
 
 hcl_to_ddl file creation rules
@@ -28,17 +22,11 @@ hcl_to_ddl file creation rules
 i need a python script that generate ddl file named db.sql from db.hcl
 
 
-hcl_to_seaorm
-------------------------------------
-this is a structure of migration of sea-orm on rust on : /orm/sea-orm/migration_structure
-this is the hcl file of all table : /fatabase/sqlite/db.hcl
-i need a python script that name is hcl_to_seaorm taht generate sea-orm migration of hcl file store in sea-orm.rs
 
-
-hcl_to_seaorm creation rules
+ddl_to_seaorm creation rules
 ------------------------------------
 this is a structure of migration of sea-orm on rust on : /orm/sea-orm/migration_structure
 this is the ddl file of all table : /fatabase/sqlite/db.sql
-i need a python script that name is ddl_to_seaorm taht generate sea-orm migration of db.sql file and store in sea-orm.rs
+i need a python script named ddl_to_seaorm.py taht generate sea-orm migration of db.sql file and store in sea-orm.rs
 
 
