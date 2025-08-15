@@ -29,23 +29,44 @@ atlas migrate new user --dir "file://migrationsq"
 
 
 
-<!--------------------------------------------------------------------------------- Init -->
+<!--------------------------------------------------------------------------------- DB To DDL -->
 <br><br>
 
-## Init
-SQLite
+## DB To DDL
+
+### SQLite
 ```bash
-atlas migrate diff init_sqlite --env sqlite
+cd ./database/sqlite/
+atlas schema inspect -u "sqlite://db.sqlite" --format '{{ sql . }}' > db.sql
 ```
 
-Postgres
+### Postgres
 ```bash
-atlas migrate diff init_pg --env pg
 ```
 
-MySQL
+### MySQL
 ```bash
-atlas migrate diff init_mysql --env mysql
+```
+
+
+
+<!--------------------------------------------------------------------------------- DB To HCL -->
+<br><br>
+
+## DB To HCL
+
+### SQLite
+```bash
+cd ./database/sqlite/
+atlas schema inspect -u "sqlite://db.sqlite" > db.hcl
+```
+
+### Postgres
+```bash
+```
+
+### MySQL
+```bash
 ```
 
 
@@ -56,66 +77,36 @@ atlas migrate diff init_mysql --env mysql
 
 ## HCL To DDL
 
-SQLite
-```bash
-atlas migrate diff database --to "file://sqlite/hcl/database.hcl" --dev-url "sqlite://dev?mode=memory" --dir "file://sqlite/ddl/"
-```
-
-Postgres
-```bash
-atlas migrate diff user --to "file://hcl/user.hcl" --dev-url "postgres://raspberrypi_api:123456@localhost:5432/raspberrypi_api?search_path=public&sslmode=disable" --dir "file://ddl/pg"
-```
-
-Mysql
-```bash
-```
-
-
-
-<!--------------------------------------------------------------------------------- Script -->
-<br><br>
-
-## Script
-
 ### SQLite
 ```bash
-sql : ./sqlite/sql.sh
-hcl : ./sqlite/hcl.sh
-ddl : ./sqlite/ddl.sh
+cd ./database/sqlite/
+atlas schema inspect --url "file://db.hcl" --dev-url "sqlite://:memory:" --format '{{ sql . }}' > db.sql
 ```
 
 ### Postgres
 ```bash
-sql : ./postgres/sql.sh
-hcl : ./postgres/hcl.sh
-ddl : ./postgres/ddl.sh
-```
-
-### Mysql
-```bash
-sql : ./mysql/sql.sh
-hcl : ./mysql/hcl.sh
-ddl : ./mysql/ddl.sh
-```
-
-
-
-<!--------------------------------------------------------------------------------- DDL To Database -->
-<br><br>
-
-## DDL To Database
-
-### SQLite
-```bash
-atlas migrate apply --url "sqlite://./app.db" --dir "file://sqlite/ddl/"
-```
-
-### Postgres
-```bash
-atlas migrate apply --env pg
 ```
 
 ### MySQL
 ```bash
-atlas migrate apply --env mysql
+```
+
+
+<!--------------------------------------------------------------------------------- DDL To DB -->
+<br><br>
+
+## DDL To HCL
+
+### SQLite
+```bash
+cd ./database/sqlite/
+sqlite3 db.sqlite < db.sql
+```
+
+### Postgres
+```bash
+```
+
+### MySQL
+```bash
 ```
