@@ -4,23 +4,29 @@
 
 
 
-<!--------------------------------------------------------------------------------- Resource -->
+<!--------------------------------------------------------------------------------- Install -->
 <br><br>  
 
-## Install
-Mac
+# Install
+<!--------------------------------------------------- Mac -->
+### Mac
 ```bash
 brew install ariga/tap/atlas
 atlas version
 ```
+<!--------------------------------------------------- Linux -->
+### Linux
+```bash
+```
 
 
 
-<!--------------------------------------------------------------------------------- Resource -->
+<!--------------------------------------------------------------------------------- Migration -->
 <br><br>  
 
-## Migration
-Create
+# Migration
+<!--------------------------------------------------- Mac -->
+### Create
 ```bash
 atlas migrate new user
 atlas migrate new user --edit
@@ -32,18 +38,18 @@ atlas migrate new user --dir "file://migrationsq"
 <!--------------------------------------------------------------------------------- DB To DDL -->
 <br><br>
 
-## DB To DDL
-
+# DB To DDL
+<!--------------------------------------------------- SQLite -->
 ### SQLite
 ```bash
 cd ./database/sqlite/
 atlas schema inspect -u "sqlite://db.sqlite" --format '{{ sql . }}' > db.sql
 ```
-
-### Postgres
+<!--------------------------------------------------- Postgresql -->
+### Postgresql
 ```bash
 ```
-
+<!--------------------------------------------------- MySQL -->
 ### MySQL
 ```bash
 ```
@@ -53,60 +59,60 @@ atlas schema inspect -u "sqlite://db.sqlite" --format '{{ sql . }}' > db.sql
 <!--------------------------------------------------------------------------------- DB To HCL -->
 <br><br>
 
-## DB To HCL
-
+# DB To HCL
+<!--------------------------------------------------- SQLite -->
 ### SQLite
 ```bash
 cd ./database/sqlite/
 atlas schema inspect -u "sqlite://db.sqlite" > db.hcl
 ```
-
-### Postgres
+<!--------------------------------------------------- Postgresql -->
+### Postgresql
 ```bash
 ```
-
+<!--------------------------------------------------- MySQL -->
 ### MySQL
 ```bash
 ```
-
 
 
 
 <!--------------------------------------------------------------------------------- HCL To DDL -->
 <br><br>
 
-## HCL To DDL
-
+# HCL To DDL
+<!--------------------------------------------------- SQLite -->
 ### SQLite
 ```bash
 cd ./database/sqlite/
 atlas schema inspect --url "file://db.hcl" --dev-url "sqlite://:memory:" --format '{{ sql . }}' > db.sql
 ```
-
-### Postgres
+<!--------------------------------------------------- Postgresql -->
+### Postgresql
 ```bash
 ```
-
+<!--------------------------------------------------- MySQL -->
 ### MySQL
 ```bash
 ```
 
 
+
 <!--------------------------------------------------------------------------------- DDL To DB -->
 <br><br>
 
-## DDL To HCL
-
+# DDL To HCL
+<!--------------------------------------------------- SQLite -->
 ### SQLite
 ```bash
 cd ./database/sqlite/
 sqlite3 db.sqlite < db.sql
 ```
-
-### Postgres
+<!--------------------------------------------------- Postgresql -->
+### Postgresql
 ```bash
 ```
-
+<!--------------------------------------------------- MySQL -->
 ### MySQL
 ```bash
 ```
