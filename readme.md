@@ -42,12 +42,12 @@ atlas migrate new user --dir "file://migrationsq"
 <!--------------------------------------------------- SQLite -->
 ### SQLite
 ```bash
-cd ./database/sqlite/
-atlas schema inspect -u "sqlite://db.sqlite" --format '{{ sql . }}' > db.sql
+atlas schema inspect -u "sqlite://sqlite.db" --format '{{ sql . }}' > sqlite.sql
 ```
 <!--------------------------------------------------- Postgresql -->
 ### Postgresql
 ```bash
+atlas schema inspect --url "postgres://raspberrypi:123456@192.168.64.7:5432/raspberrypi?sslmode=disable&search_path=public" --format '{{ sql . }}' > postgresql.sql
 ```
 <!--------------------------------------------------- MySQL -->
 ### MySQL
@@ -63,12 +63,12 @@ atlas schema inspect -u "sqlite://db.sqlite" --format '{{ sql . }}' > db.sql
 <!--------------------------------------------------- SQLite -->
 ### SQLite
 ```bash
-cd ./database/sqlite/
-atlas schema inspect -u "sqlite://db.sqlite" > db.hcl
+atlas schema inspect -u "sqlite://sqlite.db" > sqlite.hcl
 ```
 <!--------------------------------------------------- Postgresql -->
 ### Postgresql
 ```bash
+atlas schema inspect --url "postgres://raspberrypi:123456@192.168.64.7:5432/raspberrypi?sslmode=disable&search_path=public" > postgresql.hcl
 ```
 <!--------------------------------------------------- MySQL -->
 ### MySQL
@@ -84,12 +84,12 @@ atlas schema inspect -u "sqlite://db.sqlite" > db.hcl
 <!--------------------------------------------------- SQLite -->
 ### SQLite
 ```bash
-cd ./database/sqlite/
-atlas schema inspect --url "file://db.hcl" --dev-url "sqlite://:memory:" --format '{{ sql . }}' > db.sql
+atlas schema inspect --url "file://sqlite.hcl" --dev-url "sqlite://:memory:" --format '{{ sql . }}' > sqlite.sql
 ```
 <!--------------------------------------------------- Postgresql -->
 ### Postgresql
 ```bash
+atlas schema inspect --url "file://postgresql.hcl" --dev-url "postgres://raspberrypi:123456@192.168.64.7:5432/raspberrypi?sslmode=disable&search_path=public" --format '{{ sql . }}' > postgresql.sql
 ```
 <!--------------------------------------------------- MySQL -->
 ### MySQL
@@ -101,18 +101,31 @@ atlas schema inspect --url "file://db.hcl" --dev-url "sqlite://:memory:" --forma
 <!--------------------------------------------------------------------------------- DDL To DB -->
 <br><br>
 
-# DDL To HCL
+# DDL To DB
 <!--------------------------------------------------- SQLite -->
 ### SQLite
 ```bash
-cd ./database/sqlite/
-sqlite3 db.sqlite < db.sql
+sqlite3 sqlite.db < sqlite.sql
 ```
 <!--------------------------------------------------- Postgresql -->
 ### Postgresql
 ```bash
+PGPASSWORD='123456' psql -U raspberrypi -h 192.168.64.7 -d raspberrypi -f postgresql.sql
 ```
 <!--------------------------------------------------- MySQL -->
 ### MySQL
 ```bash
+```
+
+
+<!--------------------------------------------------------------------------------- Convert sqlite to postgresql -->
+<br><br>
+
+# Convert sqlite to postgresql
+```bash
+PGPASSWORD='123456' psql -h 192.168.64.7 -U postgres -d postgres -c "DROP DATABASE raspberrypi;"
+PGPASSWORD='123456' psql -h 192.168.64.7 -U postgres -d postgres -c "CREATE DATABASE raspberrypi;"
+atlas schema inspect -u "sqlite://sqlite.db" > sqlite.hcl
+PGPASSWORD='123456' atlas schema inspect --url "file://sqlite.hcl" --dev-url "postgres://postgres@192.168.64.7:5432/raspberrypi?sslmode=disable&search_path=public" --format '{{ sql . }}' > postgresql.sql
+PGPASSWORD='123456' psql -U postgres -h 192.168.64.7 -d raspberrypi -f postgresql.sql
 ```
