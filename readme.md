@@ -98,16 +98,19 @@ MySQL
 <br><br>
 
 # Convert
-<!--------------------------------------------------- Sqlite to Postgresql -->
-### Sqlite to Postgresql
+<!--------------------------------------------------- SQLite to Postgresql -->
+### SQLite to Postgresql
 ```bash
 PGPASSWORD='123456' psql -h 192.168.64.7 -U postgres -d postgres -c "DROP DATABASE raspberrypi;"
 PGPASSWORD='123456' psql -h 192.168.64.7 -U postgres -d postgres -c "CREATE DATABASE raspberrypi;"
 atlas schema inspect -u "sqlite://sqlite.db" > sqlite.hcl
-PGPASSWORD='123456' atlas schema inspect --url "file://sqlite.hcl" --dev-url "postgres://postgres@192.168.64.7:5432/raspberrypi?sslmode=disable&search_path=public" --format '{{ sql . }}' > postgresql.sql
+atlas schema inspect --url "file://sqlite.hcl" --dev-url "postgres://postgres:123456@192.168.64.7:5432/raspberrypi?sslmode=disable&search_path=public" --format '{{ sql . }}' > postgresql.sql
 PGPASSWORD='123456' psql -U postgres -h 192.168.64.7 -d raspberrypi -f postgresql.sql
 ```
 <!--------------------------------------------------- Postgresql to SQLite -->
 ### Postgresql to SQLite
 ```bash
+atlas schema inspect --url "postgres://postgres:123456@192.168.64.7:5432/raspberrypi?sslmode=disable&search_path=public" > postgresql.hcl
+atlas schema inspect --url "file://postgresql.hcl" --dev-url "sqlite://:memory:" --format '{{ sql . }}' > sqlite.sql
+sqlite3 sqlite2.db < sqlite.sql
 ```
