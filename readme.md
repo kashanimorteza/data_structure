@@ -110,7 +110,5 @@ PGPASSWORD='123456' psql -U postgres -h 192.168.64.7 -d raspberrypi -f postgresq
 <!--------------------------------------------------- Postgresql to SQLite -->
 ### Postgresql to SQLite
 ```bash
-atlas schema inspect --url "postgres://postgres:123456@192.168.64.7:5432/raspberrypi?sslmode=disable&search_path=public" > postgresql.hcl
-atlas schema inspect --url "file://postgresql.hcl" --dev-url "sqlite://:memory:" --format '{{ sql . }}' > sqlite.sql
-sqlite3 sqlite2.db < sqlite.sql
+atlas schema inspect --url "postgres://raspberrypi:123456@192.168.64.7:5432/raspberrypi?sslmode=disable&search_path=public" > postgresql.hcl
 ```
