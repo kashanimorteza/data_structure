@@ -86,7 +86,7 @@ sqlite3 sqlite.db < sqlite.sql
 ```
 Postgresql
 ```bash
-PGPASSWORD='123456' psql -U raspberrypi -h 192.168.64.7 -d raspberrypi -f postgresql.sql
+PGPASSWORD='123456' psql -U postgres -h 192.168.64.7 -d raspberrypi -f postgresql.sql
 ```
 MySQL
 ```bash
